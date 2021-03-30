@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Event Title:&nbsp;{{ event.name }}</h1>
+    <p><strong>Teacher:&nbsp;</strong><a href="">{{ event.teacher }}</a></p>
+    <p><strong>About of Event:&nbsp;</strong>{{ event.about }} 
+        <!-- {% if user.is_authenticated %}
+            <p><a class="btn btn-primary" href="{% url 'login'%}?next={{request.path}}">Login</a></p>
+        {% else %}
+            <a href="{% url 'add-attendence' event.id %}">Join</a></p>
+        {% endif %} -->
+        <a href="{% url 'add-attendence' event.id %}">Join</a></p>
+    <p><strong>Start Date:&nbsp;</strong>{{ event.date_of_start }}</p>
+    <p><strong>End Date:&nbsp;</strong>{{ event.date_of_end }}</p>
+{% endblock %}

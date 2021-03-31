@@ -35,7 +35,7 @@ class Event(models.Model):
 class EventAttendence(models.Model):
     profile = models.ImageField(upload_to='images/', default='defo')
     name = models.CharField(max_length=1000, help_text="Enter your Name")
-    email = models.EmailField(max_length=70,blank=True)
+    email = models.EmailField(max_length=70,blank=True,unique=True)
     date_of_birth = models.DateField(null=True, blank=True)
     phone_no = models.CharField(max_length=12)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True)

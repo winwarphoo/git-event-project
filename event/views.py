@@ -21,10 +21,6 @@ class EventListView(LoginRequiredMixin, generic.ListView):
 
 class EventDetailView(LoginRequiredMixin, generic.DetailView):
     model = Event
-    num_attendences= EventAttendence.objects.all().count()
-    context = {
-        'num_attendences': num_attendences,
-    }
 
 class EventUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Event
@@ -40,11 +36,11 @@ class EventAttendenceCreate(LoginRequiredMixin, generic.CreateView):
     num_attendence = EventAttendence.objects.all().count()
     fields = ['profile', 'name', 'email', 'date_of_birth', 'phone_no', 'event']
     
-    def get_initial(self):
+    def get_initial(self, **kwargs):
         initial = super().get_initial()
-        initial['event'] = self.request.user
+        initial['event'] = Event.objects.get(pk=self.kwargs["pk"])
         return initial
-    
+
     def get_context_data(self, **kwargs):
         context = super(EventAttendenceCreate, self).get_context_data(**kwargs)
         context["event"] = get_object_or_404(Event, pk=self.kwargs['pk'])

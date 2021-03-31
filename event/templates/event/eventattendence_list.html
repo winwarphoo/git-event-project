@@ -13,9 +13,11 @@
         </thead>
         {% for eventattendence in eventattendence_list %}
         <tr>
-            <td><a href="{% url 'attendence-detail' eventattendence.id %}">{{ eventattendence.name }}</a></td>
+            <td>{{ eventattendence.name }}</a></td>
             <td><img src="{{ eventattendence.profile.url }}" width="100" height="100"/></td>
-            <td><a href="{% url 'attendence-detail' eventattendence.id %}">Details</a></td>
+            {% if user == eventattendence.event.teacher.user %}
+                <td><a href="{% url 'attendence-detail' eventattendence.id %}">Details</a></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </table>

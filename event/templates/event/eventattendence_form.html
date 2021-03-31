@@ -3,10 +3,12 @@
 {% block content %}
     <p>Fill your profile for:{{ event.name }}</p>
     <form action="" method="post" enctype="multipart/form-data">
+        <div class="form-group">
         {% csrf_token %}
         <table>
         {{ form.as_table }}
         </table>
-        <input type="submit" value="Submit">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Submit">
     </form>
-    {% endblock %}
+{% endblock %}

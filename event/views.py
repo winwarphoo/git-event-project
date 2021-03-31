@@ -9,6 +9,10 @@ from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 def index(request):
+    num_attendences= EventAttendence.objects.all().count()
+    context = {
+        'num_attendences': num_attendences,
+    }
     return render(request, 'index.html')
 
 class EventListView(LoginRequiredMixin, generic.ListView):
@@ -17,15 +21,29 @@ class EventListView(LoginRequiredMixin, generic.ListView):
 
 class EventDetailView(LoginRequiredMixin, generic.DetailView):
     model = Event
+    num_attendences= EventAttendence.objects.all().count()
+    context = {
+        'num_attendences': num_attendences,
+    }
+
+class EventUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Event
+    fields = '__all__'
+
+class EventDeleteView(generic.DeleteView):
+    model = Event
+    success_url = reverse_lazy('events')
 
 class EventAttendenceCreate(LoginRequiredMixin, generic.CreateView):
     model = EventAttendence
+    attendence = EventAttendence.objects.all()
+    num_attendence = EventAttendence.objects.all().count()
     fields = ['profile', 'name', 'email', 'date_of_birth', 'phone_no', 'event']
-
-    # def get_initial(self):
-    #     initial = super().get_initial()
-    #     initial['event'] = self.request.
-    #     return initial
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['event'] = self.request.user
+        return initial
     
     def get_context_data(self, **kwargs):
         context = super(EventAttendenceCreate, self).get_context_data(**kwargs)
@@ -33,9 +51,12 @@ class EventAttendenceCreate(LoginRequiredMixin, generic.CreateView):
         return context
 
     def get_success_url(self):
-        return reverse('event-detail', kwargs={'pk': self.kwargs['pk'],})
+        return reverse('attendence-list', kwargs={'pk': self.kwargs['pk'],})
 
-class EventAttendenceDetail(generic.DetailView):
+class EventAttendenceListView(generic.ListView):
+    model = EventAttendence
+
+class EventAttendenceDetailView(generic.DetailView):
     model = EventAttendence
 
 def signup(request):

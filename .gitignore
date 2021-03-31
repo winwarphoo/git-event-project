@@ -61,7 +61,7 @@ db.sqlite3
 # Environments
 .env
 .venv
-env/
+env5/
 venv/
 ENV/
 env.bak/

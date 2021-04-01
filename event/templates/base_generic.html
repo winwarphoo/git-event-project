@@ -29,7 +29,15 @@
                         <li class="nav-item">
                             <a class="nav-link">Hello:{{ user.get_username }}</a>
                         </li>
-                        
+                        <li class="nav-item">
+                            <a class="btn btn-primary" href="{% url 'event-create' %}">Event Create</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-primary" class>Back</a>
+                        </li>
+                        <li class="nav-item"></li>
+                            <a class="btn btn-primary" href="{% url 'password_reset' %}">Password Reset</a>
+                        </li>
                         <li class="nav-item">
                             <a class="btn btn-primary" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
                         </li>

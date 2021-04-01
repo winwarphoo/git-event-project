@@ -9,10 +9,6 @@ from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 def index(request):
-    num_attendences= EventAttendence.objects.all().count()
-    context = {
-        'num_attendences': num_attendences,
-    }
     return render(request, 'index.html')
 
 class EventListView(LoginRequiredMixin, generic.ListView):
@@ -21,6 +17,16 @@ class EventListView(LoginRequiredMixin, generic.ListView):
 
 class EventDetailView(LoginRequiredMixin, generic.DetailView):
     model = Event
+
+class EventCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Event
+    fields = ['name','teacher', 'about', 'date_of_start', 'date_of_end']
+
+    def get_initial(self):
+        initial = super().get_initial()
+        print(self.request.user)
+        initial['teacher'] = EventCreator.objects.get(user = self.request.user)
+        return initial
 
 class EventUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Event
@@ -33,14 +39,14 @@ class EventDeleteView(generic.DeleteView):
 class EventAttendenceCreate(LoginRequiredMixin, generic.CreateView):
     model = EventAttendence
     attendence = EventAttendence.objects.all()
-    num_attendence = EventAttendence.objects.all().count()
     fields = ['profile', 'name', 'email', 'date_of_birth', 'phone_no', 'event']
     
     def get_initial(self, **kwargs):
         initial = super().get_initial()
         initial['event'] = Event.objects.get(pk=self.kwargs["pk"])
+        initial['name'] = self.request.user
         return initial
-
+    
     def get_context_data(self, **kwargs):
         context = super(EventAttendenceCreate, self).get_context_data(**kwargs)
         context["event"] = get_object_or_404(Event, pk=self.kwargs['pk'])

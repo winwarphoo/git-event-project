@@ -19,8 +19,12 @@
             <td>{{ event.about }}</td>
             <td>{{ event.date_of_start }}</td>
             <td>{{ event.date_of_end }}</td>
-            <td>{{ event.eventattendence_set.count }}</td>
             {% if user == event.teacher.user %}
+                <td><a href="{% url 'attendence-list' event.id %}">{{ event.eventattendence_set.count }}</a></td>
+            {% else %}
+            <td>{{ event.eventattendence_set.count }}</td>
+            {% endif %}
+            {% if user == event.teacher.user %}    
                 <td><a href="{% url 'event-update' event.id %}">Update</a></td>
                 <td><a href="{% url 'event-delete' event.id %}">Delete</a></td>
             {% else %}
